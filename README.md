@@ -19,7 +19,7 @@ Clone or download the repository to whatever directory you please. Open the file
 * `Display Mean Trajectory` - Display each trajectory from each frame or display the mean trajectory (see Methods)
 * `File to PDB` - Location to PDB file 
 * `File to Traj` - Location to trajectory file (expects either xtc or dcd format)
-* `Folder to Traj` - Location to a parent folder underneath which are other folders containing trajectory data. For instance, if you have data organized in the following format, passing in the path to the folder `traj_data`, will recursively search the directory and get all files of the format `xtc` and `dcd`. 
+* `Folder to Traj` - Location to a parent folder underneath which are other folders containing trajectory data. For instance, if you have data organized in the following format, passing in the path to the folder `traj_data` will recursively search the directory and get all files of the format `xtc` and `dcd`. 
 
 ###### Data Organization Tree
     traj_data
