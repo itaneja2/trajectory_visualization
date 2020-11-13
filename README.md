@@ -92,7 +92,6 @@ Below are images of the GFP protein with an IDR attached at the N-terminal regio
 
 
 
-[1]: https://www.shinyapps.io
 [2]: https://mdtraj.org/1.9.4/api/generated/mdtraj.join.html?highlight=join#mdtraj.join
 [3]: https://mdtraj.org/1.9.4/api/generated/mdtraj.Trajectory.superpose.html?highlight=superpose#mdtraj.Trajectory.superpose 
 [4]: https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering
