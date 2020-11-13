@@ -65,11 +65,11 @@ There's two main components to generating the input to visualize the trajectory 
 
 ### Trajectory Processing
 
-If dealing with multiple trajectories, all trajectories are first [joined] [2] into a single trajectory. Then, each frame in the trajectory is [aligned] [3] to the first frame. If the simulation consists of an IDR and FD, only the coordinates of the FD are used to align each frame. If a FD is present, the aligned coordinates of the FD from the first frame are used to visualize it. 
+If dealing with multiple trajectories, all trajectories are first [joined](https://mdtraj.org/1.9.4/api/generated/mdtraj.join.html?highlight=join#mdtraj.join) into a single trajectory. Then, each frame in the trajectory is [aligned](https://mdtraj.org/1.9.4/api/generated/mdtraj.Trajectory.superpose.html?highlight=superpose#mdtraj.Trajectory.superpose) to the first frame. If the simulation consists of an IDR and FD, only the coordinates of the FD are used to align each frame. If a FD is present, the aligned coordinates of the FD from the first frame are used to visualize it. 
 
 ### Trajectory Clustering
 
-To aid in the visualization of trajectories with a large number of frames, each frame is treated as independent instance and [hierarchically clustered] [4] according to its [Root-mean-square deviation] [5] (RMSD). Specifically, the RMSD is only calculated with respect to alpha-carbon atoms. The user has the option to specify the number of equally spaced alpha-carbon atoms they want to use to calculate the RMSD using the argument `rmsd_ca_resolution`. For instance, if an IDP is 30 residues long and `rmsd_ca_resolution = 10`, the alpha-carbon of the 3rd, 6th, 9th, etc. residues will be used to calculate the RMSD. This option is provided because the coordinates of residues in a polymer are correlated to a certain extent (as quantitivaley defined by the [persistence length] [6]), so one may get 'better' clusters as they tune that parameter. [Ando et. al] [7] cite a persistence length of a C-terminal tail around 1nm (roughly 3 residues). Granted, this is for a specific system, but provides a good starting point for playing around with this parameter. 
+To aid in the visualization of trajectories with a large number of frames, each frame is treated as independent instance and [hierarchically clustered](https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering) according to its [Root-mean-square deviation](https://en.wikipedia.org/wiki/Root-mean-square_deviation_of_atomic_positions) (RMSD). Specifically, the RMSD is only calculated with respect to alpha-carbon atoms. The user has the option to specify the number of equally spaced alpha-carbon atoms they want to use to calculate the RMSD using the argument `rmsd_ca_resolution`. For instance, if an IDP is 30 residues long and `rmsd_ca_resolution = 10`, the alpha-carbon of the 3rd, 6th, 9th, etc. residues will be used to calculate the RMSD. This option is provided because the coordinates of residues in a polymer are correlated to a certain extent (as quantitivaley defined by the [persistence length](https://en.wikipedia.org/wiki/Persistence_length)), so one may get 'better' clusters as they tune that parameter. [Ando et. al](https://chemistry-europe.onlinelibrary.wiley.com/doi/full/10.1002/cphc.200800210) cite a persistence length of a C-terminal tail around 1nm (roughly 3 residues). Granted, this is for a specific system, but provides a good starting point for playing around with this parameter. 
 
 ### Trajectory Visualization
 
@@ -80,27 +80,13 @@ In addition to visualizing each individual frame, the user also has the option t
 
 Below are images of the GFP protein with an IDR attached at the N-terminal region. Residues on the FD are color coded based on their charge (red = negative, grey = neutral, blue = positive). Opening the image in a new tab will display higher resolution versions of them. 
 
-[Figure 1] [8] -- All frames displayed for all cluster
+[Figure 1](https://imgur.com/jf1e1hp) -- All frames displayed for all cluster
 
-[Figure 2] [9] -- All frames displayed for an individual cluster
+[Figure 2](https://imgur.com/xLYrXV9) -- All frames displayed for an individual cluster
 
-[Figure 3] [10] -- Mean trajectory displayed for all clusters
-
-
+[Figure 3](https://imgur.com/pStTl1X) -- Mean trajectory displayed for all clusters
 
 
-
-
-
-[2]: https://mdtraj.org/1.9.4/api/generated/mdtraj.join.html?highlight=join#mdtraj.join
-[3]: https://mdtraj.org/1.9.4/api/generated/mdtraj.Trajectory.superpose.html?highlight=superpose#mdtraj.Trajectory.superpose 
-[4]: https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering
-[5]: https://en.wikipedia.org/wiki/Root-mean-square_deviation_of_atomic_positions
-[6]: https://en.wikipedia.org/wiki/Persistence_length
-[7]: https://chemistry-europe.onlinelibrary.wiley.com/doi/full/10.1002/cphc.200800210
-[8]: https://imgur.com/jf1e1hp
-[9]: https://imgur.com/xLYrXV9
-[10]: https://imgur.com/pStTl1X
 
 
 
