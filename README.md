@@ -1,7 +1,7 @@
 # trajectory_visualization: 
 
 
-This is a [Shiny App] [1] to visualize trajectory data of Intrinsically Disordered Proteins/Regions (IDPs/IDRs). You have the option to visualize an IDR attached to a folded domain (FD) or by itself. 
+This is a [Shiny App] (https://www.shinyapps.io) to visualize trajectory data of Intrinsically Disordered Proteins/Regions (IDPs/IDRs). You have the option to visualize an IDR attached to a folded domain (FD) or by itself. 
 
 
 
