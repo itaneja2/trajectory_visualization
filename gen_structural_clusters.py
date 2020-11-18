@@ -93,7 +93,7 @@ def get_pairwise_rmsd(traj_file_list, pdb_file, idr_start_residue, idr_end_resid
     traj_data_list = [] 
     for i in range(0,len(traj_file_list)):
         print('loading traj %i' % (i+1))
-        traj_data_list.append(md.load(traj_file_list[i], top = pdb_file))
+        traj_data_list.append(md.load(traj_file_list[i], top = pdb_file, stride = frame_stride))
 
     if len(traj_data_list) > 1:
         traj = md.join(traj_data_list, check_topology=False, discard_overlapping_frames=False)
@@ -110,19 +110,20 @@ def get_pairwise_rmsd(traj_file_list, pdb_file, idr_start_residue, idr_end_resid
         print('Frame Stride > Total # of Frames')
         sys.exit()
 
-    dist_matrix = np.zeros((num_frames, num_frames))
+    if num_clusters > 1:
 
-    #print(ca_atom_idx_idr)
-    #print(ca_atom_idx_subset)
-    print("Generating Distance Matrix")
-    for i in range(0, num_frames, frame_stride):
-        #if i % 100 == 0:
-            #print('Frame %i' % i)
-        rmsd = md.rmsd(traj, traj, i, atom_indices = np.array(ca_atom_idx_idr)[ca_atom_idx_subset]) #when atom_indices != None, precentered is ignored
-        dist_matrix[i,:] = rmsd
+        dist_matrix = np.zeros((num_frames, num_frames))
 
+        print("Generating Distance Matrix")
+        #for i in range(0, num_frames, frame_stride):
+        for i in range(0, num_frames):
+            #if i % 100 == 0:
+                #print('Frame %i' % i)
+            rmsd = md.rmsd(traj, traj, i, atom_indices = np.array(ca_atom_idx_idr)[ca_atom_idx_subset]) #when atom_indices != None, precentered is ignored
+            dist_matrix[i,:] = rmsd
 
-    clustering = AgglomerativeClustering(affinity='precomputed', n_clusters=num_clusters, linkage='complete').fit(dist_matrix)
+        print("Generating Clusters")
+        clustering = AgglomerativeClustering(affinity='precomputed', n_clusters=num_clusters, linkage='complete').fit(dist_matrix)
 
 
     traj_xyz_fd = traj.xyz[0,atom_idx_fd,:]
@@ -138,7 +139,8 @@ def get_pairwise_rmsd(traj_file_list, pdb_file, idr_start_residue, idr_end_resid
         pdb_df.to_csv('./pdb_coordinate_representation.csv', index=False)
 
 
-    relevant_frames = np.arange(0,num_frames,frame_stride)
+    #relevant_frames = np.arange(0,num_frames,frame_stride)
+    relevant_frames = np.arange(0,num_frames)
     traj_xyz_ca_idr = traj.xyz[relevant_frames[:,None],np.array(ca_atom_idx_idr)[None,:],:]
     traj_xyz_ca_idr_df = traj_xyz_ca_idr.reshape(traj_xyz_ca_idr.shape[0]*traj_xyz_ca_idr.shape[1],traj_xyz_ca_idr.shape[2])
 
@@ -151,7 +153,10 @@ def get_pairwise_rmsd(traj_file_list, pdb_file, idr_start_residue, idr_end_resid
         start_idx = traj_xyz_ca_idr.shape[1]*i
         end_idx = start_idx + traj_xyz_ca_idr.shape[1]
         frame_num[start_idx:end_idx] = i+1
-        cluster_labels[start_idx:end_idx] = clustering.labels_[i]
+        if num_clusters > 1:
+            cluster_labels[start_idx:end_idx] = clustering.labels_[i]
+        else:
+            cluster_labels[start_idx:end_idx] = 0
 
 
     print("Saving Cluster Output")
@@ -203,21 +208,21 @@ def main(argv):
                         frame_stride = arg 
 
         
-        #idr_start_residue = 2
-        #idr_end_residue = 31
-        #fd_start_residue = 32 
-        #fd_end_residue = 247
+        idr_start_residue = 2
+        idr_end_residue = 31
+        fd_start_residue = 32 
+        fd_end_residue = 247
         #fd_start_residue = 'NA'
         #fd_end_residue = 'NA'
 
-        #rmsd_ca_resolution = 10
-        #num_clusters = 3
-        #frame_stride = 10
+        rmsd_ca_resolution = 10
+        num_clusters = 5
+        frame_stride = 50
 
-        #pdb_file = '/Users/ishan/Holehouse/IDR_FD_wo_NCterm/tail_len30/GSn_GFPw15/equilibriation/coil_start/1/__START.pdb'
+        pdb_file = '/Users/ishan/Holehouse/IDR_FD_wo_NCterm/tail_len30/GSn_GFPw15/production/coil_start/1/__START.pdb'
         #pdb_file = '/Users/ishan/Holehouse/IDR_only/GSnr15_1/equilibriation/coil_start/1/__START.pdb'
         #traj_file = '/Users/ishan/Holehouse/IDR_FD_wo_NCterm/tail_len30/GSn_GFPw15/equilibriation/coil_start/1/__traj.xtc'
-        #traj_file = '/Users/ishan/Holehouse/IDR_FD_wo_NCterm/tail_len30/GSn_GFPw15/equilibriation/coil_start'
+        traj_file = '/Users/ishan/Holehouse/IDR_FD_wo_NCterm/tail_len30/GSn_GFPw15/production/coil_start'
         #traj_file = '/Users/ishan/Holehouse/IDR_only/GSnr15_1/equilibriation/coil_start'
 
         if fd_start_residue == 'NA' and fd_end_residue != 'NA':

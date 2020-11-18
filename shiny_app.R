@@ -306,7 +306,7 @@ shinyServer = function(input, output) {
   global_traj_folder = reactiveValues(datapath = getwd())
 
   trajfolder = reactive(input$trajfolder)
-  output$trajfolder = renderText({
+  output$trajfolderchosen = renderText({
      global_traj_folder$datapath
   })
   observeEvent(ignoreNULL = TRUE,
